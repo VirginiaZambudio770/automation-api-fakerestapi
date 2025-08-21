@@ -1,0 +1,24 @@
+# Created by venv; see https://docs.python.org/3/library/venv.html
+# Python folders
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# virtual environment
+venv/
+.env/
+
+# logs file
+*.log
+
+# test reports
+reports/
+
+# IDE local configuration
+.vscode/
+.idea/
+
+# local temporal files
+.DS_Store
+Thumbs.db
