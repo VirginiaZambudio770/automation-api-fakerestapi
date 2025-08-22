@@ -1,0 +1,50 @@
+name: Python API Tests on Windows
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/*'
+  pull_request:
+    branches:
+      - main
+      - 'feature/*'
+
+jobs:
+  test:
+    runs-on: windows-latest
+
+    steps:
+      # Download repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Python Configuration
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.13
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-html
+
+      # Create reports folder
+      - name: Create reports folder
+        run: |
+          if not exist reports mkdir reports
+
+      # Run tests and generate report
+      - name: Run tests
+        run: |
+          pytest -s --html=reports/report.html --self-contained-html
+
+      # Upload test report
+      - name: Upload test report
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: reports/report.html
