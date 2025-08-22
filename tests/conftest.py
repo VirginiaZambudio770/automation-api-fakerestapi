@@ -60,3 +60,11 @@ def existing_book():
 def invalid_book_id():
     return 9999999999
 
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    rep = outcome.get_result()
+    if rep.when == "call":
+        rep.description = str(item.function.__doc__)  # Test docstring 
+        rep.custom_message = getattr(item.function, "custom_message", "")
+

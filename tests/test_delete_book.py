@@ -9,7 +9,7 @@ books_api = BooksAPI()
 
 
 def test_delete_book_happy_path(created_book):
-    #Verify happy path returns 200 OK
+    """Verify happy path returns 200 OK"""
     book_id = created_book["id"]  
     response = books_api.delete_book(book_id) 
     assert response.status_code == HTTPStatus.OK, f"Expected {HTTPStatus.OK} but got {response.status_code}"
@@ -21,7 +21,7 @@ def test_delete_book_happy_path(created_book):
 #  NEGATIVE TESTS 
 
 def test_delete_book_invalid_id(invalid_book_id):
-    # Verify status code is 404 when book id is invalid
+    """Verify status code is 404 when book id is invalid"""
     response = books_api.get_book_by_id(invalid_book_id)
     assert response.status_code == 400  
     data = response.json()
@@ -30,6 +30,7 @@ def test_delete_book_invalid_id(invalid_book_id):
 
 @pytest.mark.skip(reason="It is skipped because this API doesnt requiere token yet")  
 def test_delete_book_without_token(created_book):
+    """Verify status code 401 or 403 without token"""
     book_id = created_book["id"] 
     headers = {"Authorization": ""}  # No Authorization header
     response = books_api.delete_book(book_id, headers=headers) 

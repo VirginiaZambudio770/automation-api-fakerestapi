@@ -44,7 +44,7 @@ jobs:
       - name: Run tests
         run: |
           $env:PYTHONPATH="$env:PYTHONPATH;."
-          pytest -s --html=reports/report.html --self-contained-html
+          pytest --html=reports/report.html --self-contained-html --capture=tee-sys --self-contained-html
 
       # Upload test report
       - name: Upload test report
