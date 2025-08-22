@@ -15,8 +15,6 @@ def test_post_books_status_code_200(valid_book_payload):
     response = books_api.create_book(valid_book_payload)
     book_created = response.json()
     book_id = book_created["id"]
-    print (f"book_idbook_idbook_idbook_id "+str(book_id))
-    assert response.status_code == 200, f"Expected status code 200 but got {response.status_code}. Response body: {response.text}"
     assert response.status_code == HTTPStatus.OK, f"Expected {HTTPStatus.OK} but got {response.status_code}"
     
 def test_post_books_content_type_json(valid_book_payload):

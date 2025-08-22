@@ -3,6 +3,7 @@
 import pytest
 from api_client.books_api import BooksAPI
 from datetime import datetime, timezone
+from http import HTTPStatus
 import uuid
 
 books_api = BooksAPI()
@@ -31,8 +32,31 @@ def invalid_book_payload():
         "publishDate": "invalid"
     }
     
-@pytest.fixture() #It is created by test file (scope="module")
+@pytest.fixture() #It is created by test file if use(scope="module")
 def created_book(valid_book_payload):
+    # Create book with POST
     response = books_api.create_book(valid_book_payload)
-    book = response.json()
-    yield book
+    assert response.status_code == HTTPStatus.OK or response.status_code == HTTPStatus.CREATED, \
+        f"Failed to create book. Status: {response.status_code}, Body: {response.text}"
+    
+    book_data = response.json()
+    book_id = book_data.get("id")
+    
+    # Cleanup: delete the book after test
+    yield book_data
+    delete_response = books_api.delete_book(book_id)
+    
+@pytest.fixture
+def existing_book():
+    return {
+        "id": 1,
+        "title": "Book 1",
+        "description": "Lorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\n",
+        "pageCount": 100,
+        "excerpt": "Lorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\n"
+    } 
+    
+@pytest.fixture
+def invalid_book_id():
+    return 9999999999
+

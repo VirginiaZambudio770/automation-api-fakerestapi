@@ -12,7 +12,6 @@ def test_put_book_happy_path(created_book, valid_book_payload):
     #Verify happy path returns 200 OK
     book_id = created_book["id"]
     response = books_api.update_book(book_id, valid_book_payload)  
-    assert response.status_code == 200, f"Expected status code 200 but got {response.status_code}. Response body: {response.text}"
     assert response.status_code == HTTPStatus.OK, f"Expected {HTTPStatus.OK} but got {response.status_code}"
     
 def test_put_books_content_type_json(created_book, valid_book_payload):
