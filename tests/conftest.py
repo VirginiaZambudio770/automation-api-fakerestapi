@@ -60,11 +60,25 @@ def existing_book():
 def invalid_book_id():
     return 9999999999
 
+# conftest.py
+import pytest
+
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     outcome = yield
     rep = outcome.get_result()
     if rep.when == "call":
-        rep.description = str(item.function.__doc__)  # Test docstring 
+        rep.description = str(item.function.__doc__)
         rep.custom_message = getattr(item.function, "custom_message", "")
+
+# Add docstrings to HTML report 
+def pytest_html_results_table_row(report, cells):
+    if hasattr(report, "description") and report.description:
+        # Insertar docstring antes de la columna del test
+        cells.insert(1, report.description)
+
+# Change column name
+def pytest_html_results_table_header(cells):
+    cells.insert(1, "Description")
+
 
