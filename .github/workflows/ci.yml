@@ -43,6 +43,7 @@ jobs:
       # Run tests and generate report
       - name: Run tests
         run: |
+          $env:PYTHONPATH="$env:PYTHONPATH;."
           pytest -s --html=reports/report.html --self-contained-html
 
       # Upload test report
