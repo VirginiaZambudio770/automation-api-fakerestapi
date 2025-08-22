@@ -34,8 +34,11 @@ jobs:
 
       # Create reports folder
       - name: Create reports folder
+        shell: pwsh
         run: |
-          if not exist reports mkdir reports
+          if (-Not (Test-Path -Path reports)) {
+           New-Item -ItemType Directory -Path reports
+          }
 
       # Run tests and generate report
       - name: Run tests
