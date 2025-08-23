@@ -46,6 +46,17 @@ Python 3.9+
 pip
 virtualenv (recommended)
 
+Create and activate virtual environment:
+python -m venv venv
+
+# Windows
+
+venv\Scripts\activate
+
+# Mac/Linux
+
+source venv/bin/activate
+
 Install dependencies:
 pytest
 requests
@@ -78,3 +89,16 @@ Generates an HTML report in the reports folder
 
 Pytest generates HTML reports in reports/ with detailed execution results and timestamp.
 pytest -s --html=reports/report\_$(Get-Date -Format "yyyyMMdd_HHmmss").html
+
+## CI/CD with GitHub Actions
+
+The workflow is defined in .github/workflows/ci.yml.
+It runs automatically on:
+Push to main or feature/_
+Pull requests to main or feature/_
+Manual trigger from the GitHub Actions tab (Run workflow button).
+
+## Where to find results
+
+After the job finishes, go to the Actions tab → select the workflow run → Artifacts section.
+Download the test-report artifact to view the HTML test report. Open it with a browser.

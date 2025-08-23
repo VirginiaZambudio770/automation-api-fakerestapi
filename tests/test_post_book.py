@@ -32,14 +32,14 @@ def test_post_books_returns_created_book_data(valid_book_payload):
 #  NEGATIVE TESTS 
 
 def test_post_books_invalid_payload_returns_error(invalid_book_payload):
-    """ Verify that an invalid payload returns error code (400). """
+    """ Verify that an invalid payload returns 400 Bad Request. """
     response = books_api.create_book(invalid_book_payload)
     assert response.status_code == 400 
     data = response.json()
     assert "errors" in data 
     
 def test_post_books_invalid_header_returns_error(invalid_book_payload):
-    """ Verify that an invalid content-type returns error code (415). """
+    """ Verify that an invalid content-type returns 415 Unsupported Media Type. """
     headers = {"Content-Type": "1111"}
     response = books_api.create_book(invalid_book_payload, headers=headers)
     assert response.status_code == 415
@@ -48,7 +48,7 @@ def test_post_books_invalid_header_returns_error(invalid_book_payload):
         
 @pytest.mark.skip(reason="It is skipped because this API doesnt requiere token yet")  
 def test_post_books_without_token_should_fail(valid_book_payload):
-    """ Verify status code 401 or 403 without token """
+    """ Verify that it returns 401 UNAUTHORIZED or 403 FORBIDDEN """
     headers = {"Authorization": ""}  # No Authorization
     response = books_api.create_book(valid_book_payload, headers=headers)  
     assert response.status_code in (HTTPStatus.UNAUTHORIZED, HTTPStatus.FORBIDDEN), (
