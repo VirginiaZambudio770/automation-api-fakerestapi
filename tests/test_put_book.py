@@ -1,7 +1,6 @@
 import pytest
 from api_client.books_api import BooksAPI
 from config import config
-from datetime import datetime, timezone
 from http import HTTPStatus
 from tests.utils.book_helpers import assert_book_data_matches
 

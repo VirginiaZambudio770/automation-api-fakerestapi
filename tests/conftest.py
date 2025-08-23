@@ -44,7 +44,7 @@ def created_book(valid_book_payload):
     
     # Cleanup: delete the book after test
     yield book_data
-    delete_response = books_api.delete_book(book_id)
+    books_api.delete_book(book_id)
     
 @pytest.fixture
 def existing_book():
@@ -60,9 +60,6 @@ def existing_book():
 def invalid_book_id():
     return 9999999999
 
-# conftest.py
-import pytest
-
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     outcome = yield
@@ -74,11 +71,5 @@ def pytest_runtest_makereport(item, call):
 # Add docstrings to HTML report 
 def pytest_html_results_table_row(report, cells):
     if hasattr(report, "description") and report.description:
-        # Insertar docstring antes de la columna del test
+        # Insert docstring before test column
         cells.insert(1, report.description)
-
-# Change column name
-def pytest_html_results_table_header(cells):
-    cells.insert(1, "Description")
-
-
