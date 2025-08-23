@@ -38,10 +38,8 @@ def created_book(valid_book_payload):
     response = books_api.create_book(valid_book_payload)
     assert response.status_code == HTTPStatus.OK or response.status_code == HTTPStatus.CREATED, \
         f"Failed to create book. Status: {response.status_code}, Body: {response.text}"
-    
     book_data = response.json()
     book_id = book_data.get("id")
-    
     # Cleanup: delete the book after test
     yield book_data
     books_api.delete_book(book_id)

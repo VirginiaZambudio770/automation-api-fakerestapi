@@ -6,7 +6,6 @@ from tests.utils.book_helpers import assert_book_data_matches
 
 books_api = BooksAPI()
 
-
 def test_put_book_happy_path(created_book, valid_book_payload):
     """ Verify happy path returns 200 OK """
     book_id = created_book["id"]
@@ -26,7 +25,6 @@ def test_put_books_returns_created_book_data(created_book, valid_book_payload):
     data = response.json()
     assert data["id"] == book_id
     assert_book_data_matches(valid_book_payload, data)
-
 
 #  NEGATIVE TESTS 
 

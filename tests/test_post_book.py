@@ -1,4 +1,3 @@
-# tests/test_post_book.py
 import pytest
 from api_client.books_api import BooksAPI
 from config import config
@@ -6,7 +5,6 @@ from http import HTTPStatus
 from tests.utils.book_helpers import assert_book_data_matches
 
 books_api = BooksAPI()
-
 
 def test_post_books_status_code_200(valid_book_payload):
     """ Verify happy path returns 200 OK """

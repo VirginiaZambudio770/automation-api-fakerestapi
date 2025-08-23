@@ -6,7 +6,6 @@ from tests.utils.book_helpers import assert_book_data_matches
 
 books_api = BooksAPI()
 
-
 def test_get_book_happy_path(existing_book):
     """ Verify happy path returns 200 OK """
     book_id = existing_book["id"]
