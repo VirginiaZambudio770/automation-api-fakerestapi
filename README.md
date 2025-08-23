@@ -1,16 +1,80 @@
-# automation-api-fakerestapi
+## Automation API Project
 
-Automation of FakerestAPI APIs with Python
+Automation of FakerestAPI APIs with Python:
+This project implements automated tests for the Books API using Python, Pytest, and GitHub Actions for continuous integration.
 
-## Test Cases
+## Description
 
-| ID    | Test Name                                     | Description                              | Input                                | Expected Result                         |
-| ----- | --------------------------------------------- | ---------------------------------------- | ------------------------------------ | --------------------------------------- |
-| TC001 | test_post_books_status_code_200               | Create a valid book                      | Valid JSON payload                   | Status 200, book created successfully   |
-| TC002 | test_post_books_without_token_should_fail     | Attempt to create a book without a token | Valid JSON payload                   | Status 401 or 403, authentication error |
-| TC003 | test_post_books_invalid_payload_returns_error | Create a book with invalid payload       | Payload with missing or wrong fields | Status 400/422, error in response body  |
-| TC004 | test_post_books_invalid_header_returns_error  | Create a book with invalid header        | Invalid Content-Type header          | Status 415, Unsupported Media Type      |
+The API allows managing books with CRUD operations.
+Supported endpoints:
 
-##Report
-Generate report.html using pytest -s --html=reports/report\_$(Get-Date -Format "yyyyMMdd_HHmmss").html
-It is saved in \automation-api-python\reports
+GET /api/v1/Books – Retrieve a list of all books.
+GET /api/v1/Books/{id} – Retrieve details of a specific book by its ID.
+POST /api/v1/Books – Add a new book.
+PUT /api/v1/Books/{id} – Update an existing book by its ID.
+DELETE /api/v1/Books/{id} – Delete a book by its ID.
+
+## Project Structure
+
+AUTOMATION-API-PYTHON/
+├── .github/
+├── .pytest_cache/
+├── api_client/ # Likely contains API client classes or functions
+├── assets/ # Assets such as test data or images (if any)
+├── config/ # Configuration files (URLs, environment, etc.)
+├── reports/ # Test reports (HTML, logs)
+├── tests/
+│ ├── **pycache**/ # Python cache files
+│ ├── utils/ # Utility functions or helper methods
+│ ├── conftest.py # Pytest configuration and fixtures
+│ ├── test_delete_book.py # Tests for DELETE /Books/{id}
+│ ├── test_get_books_by_id.py # Tests for GET /Books/{id}
+│ ├── test_get_books.py # Tests for GET /Books
+│ ├── test_post_book.py # Tests for POST /Books
+│ └── test_put_book.py # Tests for PUT /Books/{id}
+├── venv/ # Python virtual environment
+│ ├── Include/
+│ ├── Lib/
+│ └── Scripts/
+├── .gitignore
+├── README.md
+└── requirements.txt
+
+## Requirements
+
+Python 3.9+
+pip
+virtualenv (recommended)
+
+Install dependencies:
+pytest
+requests
+pytest-html
+python-dotenv
+pip install -r requirements.txt
+
+## Run Tests Locally
+
+1. Clone the repository
+   git clone https://github.com/VirginiaZambudio770/automation-api-fakerestapi.git
+   cd books-api-tests
+2. Set up environment variables in config.py:
+   BASE_URL = "https://fakerestapi.azurewebsites.net"
+   BOOKS_ENDPOINT = "/api/v1/Books"
+   HEADERS = {"Content-Type": "application/json"}
+3. Run all tests:
+   pytest -v --html=reports/report.html --self-contained-html
+4. Run specific tests (e.g., GET):
+   pytest tests/test_get_books.py
+
+## Continuous Integration with GitHub Actions
+
+This project includes a workflow that:
+Installs dependencies
+Runs tests
+Generates an HTML report in the reports folder
+
+## Test Reports
+
+Pytest generates HTML reports in reports/ with detailed execution results and timestamp.
+pytest -s --html=reports/report\_$(Get-Date -Format "yyyyMMdd_HHmmss").html
