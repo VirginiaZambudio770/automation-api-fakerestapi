@@ -23,22 +23,27 @@ def test_get_books_body_not_empty():
     response = books_api.get_books()
     assert len(response.text) > 0
     
-#@pytest.mark.xfail(reason="API does not persist data, so GET after POST will fail")
+@pytest.mark.xfail(reason="API does not persist data, so GET after POST will fail")
 def test_post_and_get_book_persists_data(valid_book_payload):
-    """ Verify the post persists data """
+    """ Verify the post persists data in the FakeRestAPI """
     response = books_api.create_book(valid_book_payload)
     assert response.status_code == HTTPStatus.OK, (
         f"Expected 200 OK but got {response.status_code}. Body: {response.text}"
     )
     book_created = response.json()
     book_id = book_created["id"]
-    get_response = books_api.get_book_by_id(book_id)
+    get_response = books_api.get_books()
     assert get_response.status_code == HTTPStatus.OK, (
         f"Expected 200 OK but got {get_response.status_code}. Body: {get_response.text}"
     )
-    book_retrieved = get_response.json()
-    assert_book_data_matches(valid_book_payload, book_retrieved)
-
+    all_books = get_response.json()
+    found_book = None
+    for book in all_books:
+        if book["id"] == book_id:
+            found_book = book
+            break
+    assert_book_data_matches(valid_book_payload, found_book)
+   
 #  NEGATIVE TESTS 
 
 def test_get_books_wrong_endpoint():
