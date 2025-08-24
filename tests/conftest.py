@@ -21,7 +21,7 @@ def valid_book_payload():
     }
     
 @pytest.fixture
-def update_book_payload():
+def updated_book_payload():
     #Update Payload
     return {
         "id": 0,
