@@ -42,7 +42,7 @@ def test_post_books_invalid_header_returns_error(invalid_book_payload):
     data = response.json()
     assert data.get("title") == "Unsupported Media Type"
         
-@pytest.mark.skip(reason="It is skipped because this API doesnt requiere token yet")  
+@pytest.mark.skip(reason="It is skipped because this API doesn´t requiere token yet")  
 def test_post_books_without_token_should_fail(valid_book_payload):
     """ Verify that it returns 401 UNAUTHORIZED or 403 FORBIDDEN """
     headers = {"Authorization": ""}  # No Authorization

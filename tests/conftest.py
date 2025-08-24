@@ -58,6 +58,10 @@ def existing_book():
 def invalid_book_id():
     return 9999999999
 
+@pytest.fixture
+def non_exist_book_id():
+    return 555
+
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     outcome = yield

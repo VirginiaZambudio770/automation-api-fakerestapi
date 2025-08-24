@@ -102,3 +102,11 @@ Manual trigger from the GitHub Actions tab (Run workflow button).
 
 After the job finishes, go to the Actions tab → select the workflow run → Artifacts section.
 Download the test-report artifact to view the HTML test report. Open it with a browser.
+
+## Notes
+
+Some test cases are skipped because the API is a mock and has the following limitations:
+
+- Data is not persisted between requests.
+- Security features are not implemented.
+- Not all HTTP status codes are correctly handled.
