@@ -28,7 +28,25 @@ def test_get_books_wrong_endpoint():
     response = requests.get(f"{config.BASE_URL}/api/v1/Bookss") 
     assert response.status_code == HTTPStatus.NOT_FOUND, f"Expected {HTTPStatus.NOT_FOUND} but got {response.status_code}. Body: {response.text}"
     
-@pytest.mark.skip(reason="It is skipped because this API doesnt requiere token yet")  
+@pytest.mark.skip(reason="It is skipped because this API doesn´t recognize invalid header") 
+def test_get_books_bad_request_invalid_header():
+    """Verify invalid Content-Type header returns 400 Bad Request"""
+    headers = {"Content-Type": "invalid/type"}  # Unsupported header 
+    response = requests.get(f"{config.BASE_URL}/api/v1/Books", headers=headers)
+    assert response.status_code == HTTPStatus.BAD_REQUEST, (
+        f"Expected {HTTPStatus.BAD_REQUEST} but got {response.status_code}. Body: {response.text}"
+    )
+
+@pytest.mark.skip(reason="It is skipped because this API doesn´t recognize an invalid param")  
+def test_get_books_bad_request_invalid_query():
+    """Verify invalid query parameter returns 400 Bad Request"""
+    params = {"id": "abc"}  # <> number
+    response = requests.get(f"{config.BASE_URL}/api/v1/Books", params=params)
+    assert response.status_code == HTTPStatus.BAD_REQUEST, (
+        f"Expected {HTTPStatus.BAD_REQUEST} but got {response.status_code}. Body: {response.text}"
+    )
+    
+@pytest.mark.skip(reason="It is skipped because this API doesn´t requiere token yet")  
 def test_get_books_without_token_should_fail():
     """ Verify status code 401 or 403 without token """
     headers = {"Authorization": ""}  # No Authorization

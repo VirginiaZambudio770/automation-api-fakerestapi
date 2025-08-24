@@ -1,12 +1,10 @@
 import pytest
 from api_client.books_api import BooksAPI
 from config import config
-from datetime import datetime, timezone
 from http import HTTPStatus
 from tests.utils.book_helpers import assert_book_data_matches
 
 books_api = BooksAPI()
-
 
 def test_get_book_happy_path(existing_book):
     """ Verify happy path returns 200 OK """
@@ -40,9 +38,18 @@ def test_get_book_invalid_id(invalid_book_id):
     assert response.status_code == HTTPStatus.BAD_REQUEST, f"Expected {HTTPStatus.BAD_REQUEST} but got {response.status_code}. Body: {response.text}"
     data = response.json()
     assert data.get("title") == "One or more validation errors occurred."
-
-@pytest.mark.skip(reason="It is skipped because this API doesnt requiere token yet")  
-def test_put_book_without_token(existing_book, valid_book_payload):
+    
+def test_get_book_not_found(non_exist_book_id):
+    """Verify that trying to get a non-existent book returns 404 NOT FOUND"""
+    response = books_api.get_book_by_id(non_exist_book_id)
+    assert response.status_code == HTTPStatus.NOT_FOUND, (
+        f"Expected {HTTPStatus.NOT_FOUND} but got {response.status_code}. Body: {response.text}"
+    )
+    data = response.json()
+    assert data.get("title") == "Not Found"
+    
+@pytest.mark.skip(reason="It is skipped because this API doesn´t requiere token yet")  
+def test_put_book_without_token(existing_book):
     """ Verify status code 401 or 403 without token """
     book_id = existing_book["id"]
     headers = {"Authorization": ""} # No Authorization
