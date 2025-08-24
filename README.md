@@ -88,7 +88,7 @@ Generates an HTML report in the reports folder
 ## Test Reports
 
 Pytest generates HTML reports in reports/ with detailed execution results and timestamp.
-pytest -s --html=reports/report\_$(Get-Date -Format "yyyyMMdd_HHmmss").html
+pytest -s --html="reports\report\_$(Get-Date -Format 'yyyyMMdd_HHmmss').html"
 
 ## CI/CD with GitHub Actions
 
@@ -105,8 +105,16 @@ Download the test-report artifact to view the HTML test report. Open it with a b
 
 ## Notes
 
-Some test cases are skipped because the API is a mock and has the following limitations:
+The provided FakeRestAPI has some known limitations that impact certain test cases:
 
-- Data is not persisted between requests.
-- Security features are not implemented.
-- Not all HTTP status codes are correctly handled.
+Data is not persisted between requests:
+Tests that verify persistence (e.g., POST followed by GET, DELETE followed by GET) will fail because the API does not store created or updated data.
+
+Security features are not implemented:
+The API does not require authentication, so tests expecting 401 Unauthorized or 403 Forbidden are marked as expected failures.
+
+Not all HTTP status codes are correctly handled:
+For example, when requesting a non-existent book, the API may return 200 OK instead of 404 Not Found.
+Tests for these scenarios are still included for completeness but are marked as expected failures.
+
+For these cases, Pytest flags (xfail) are used so that they appear as expected failures in the report, rather than incorrect implementations.
