@@ -20,8 +20,8 @@ AUTOMATION-API-PYTHON/
 ├── .github/
 ├── .pytest_cache/
 ├── api_client/ # Likely contains API client classes or functions
-├── assets/ # Assets such as test data or images (if any)
-├── config/ # Configuration files (URLs, environment, etc.)
+├── assets/ # Report style file
+├── config/ # Configuration files (URL, endpoint, header)
 ├── reports/ # Test reports (HTML, logs)
 ├── tests/
 │ ├── **pycache**/ # Python cache files
@@ -68,13 +68,13 @@ pip install -r requirements.txt
 
 1. Clone the repository
    git clone https://github.com/VirginiaZambudio770/automation-api-fakerestapi.git
-   cd books-api-tests
+   cd automation-api-fakerestapi
 2. Set up environment variables in config.py:
    BASE_URL = "https://fakerestapi.azurewebsites.net"
    BOOKS_ENDPOINT = "/api/v1/Books"
    HEADERS = {"Content-Type": "application/json"}
 3. Run all tests:
-   pytest -v --html=reports/report.html --self-contained-html
+   pytest -v --self-contained-html
 4. Run specific tests (e.g., GET):
    pytest tests/test_get_books.py
 
@@ -87,8 +87,9 @@ Generates an HTML report in the reports folder
 
 ## Test Reports
 
-Pytest generates HTML reports in reports/ with detailed execution results and timestamp.
-pytest -s --html="reports\report\_$(Get-Date -Format 'yyyyMMdd_HHmmss').html"
+Generates HTML reports with Pytest locally, as a history, in reports folder with detailed execution results and timestamp, using the following command:
+$fecha = Get-Date -Format "yyyyMMdd_HHmmss"
+pytest -v --html="reports/report_$fecha.html" --self-contained-html
 
 ## CI/CD with GitHub Actions
 
