@@ -25,10 +25,11 @@ def test_get_book_returns_expected_data(existing_book):
     book_id = existing_book["id"]
     response = books_api.get_book_by_id(book_id)
     data = response.json()
-    assert data["id"] == book_id
-    assert "title" in data
-    assert "description" in data
-    assert "pageCount" in data
+    assert data["title"] == existing_book["title"]
+    assert data["description"] == existing_book["description"]
+    assert data["pageCount"] == existing_book["pageCount"]
+    assert data["excerpt"] == existing_book["excerpt"]
+    assert "publishDate" in data 
 
 # NEGATIVE TESTS
 

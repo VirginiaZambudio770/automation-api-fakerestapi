@@ -19,6 +19,18 @@ def valid_book_payload():
         "excerpt": "This is an excerpt",
         "publishDate": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     }
+    
+@pytest.fixture
+def update_book_payload():
+    #Update Payload
+    return {
+        "id": 0,
+        "title": f"Test Book {uuid.uuid4()}",  # Unique title
+        "description": "This is a test book description",
+        "pageCount": 123,
+        "excerpt": "This is an excerpt",
+        "publishDate": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    }
 
 @pytest.fixture
 def invalid_book_payload():
@@ -47,12 +59,13 @@ def created_book(valid_book_payload):
 @pytest.fixture
 def existing_book():
     return {
-        "id": 1,
-        "title": "Book 1",
-        "description": "Lorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\n",
-        "pageCount": 100,
-        "excerpt": "Lorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\n"
-    } 
+    "id": 1,
+    "title": "Book 1",
+    "description": "Lorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\n",
+    "pageCount": 100,
+    "excerpt": "Lorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\nLorem lorem lorem. Lorem lorem lorem. Lorem lorem lorem.\n",
+    "publishDate": "2025-08-23T21:21:15.5794204+00:00"
+} 
     
 @pytest.fixture
 def invalid_book_id():
