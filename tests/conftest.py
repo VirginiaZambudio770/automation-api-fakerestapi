@@ -73,10 +73,9 @@ def pytest_runtest_makereport(item, call):
 # Add docstrings to HTML report 
 def pytest_html_results_table_row(report, cells):
     if hasattr(report, "description") and report.description:
-        # Insert docstring before test column
+        # Insert docstring 
         cells.insert(1, report.description)
-        
-@pytest.hookimpl(optionalhook=True)
-def pytest_html_table_header(cells):
-    # report columns
-    cells.insert(2, "Description")  
+
+# Change column name
+def pytest_html_results_table_header(cells):
+    cells.insert(1, "Description")
