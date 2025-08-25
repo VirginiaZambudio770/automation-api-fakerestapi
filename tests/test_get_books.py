@@ -4,6 +4,8 @@ from config import config
 from http import HTTPStatus
 import requests
 
+from tests.utils.book_helpers import assert_book_data_matches
+
 books_api = BooksAPI()
 
 def test_get_books_status_code_200():
@@ -20,7 +22,28 @@ def test_get_books_body_not_empty():
     """ Verify Books body is not empty """
     response = books_api.get_books()
     assert len(response.text) > 0
-
+    
+@pytest.mark.xfail(reason="API does not persist data, so GET after POST will fail")
+def test_post_and_get_book_persists_data(valid_book_payload):
+    """ Verify the post persists data in the FakeRestAPI """
+    response = books_api.create_book(valid_book_payload)
+    assert response.status_code == HTTPStatus.OK, (
+        f"Expected 200 OK but got {response.status_code}. Body: {response.text}"
+    )
+    book_created = response.json()
+    book_id = book_created["id"]
+    get_response = books_api.get_books()
+    assert get_response.status_code == HTTPStatus.OK, (
+        f"Expected 200 OK but got {get_response.status_code}. Body: {get_response.text}"
+    )
+    all_books = get_response.json()
+    found_book = None
+    for book in all_books:
+        if book["id"] == book_id:
+            found_book = book
+            break
+    assert_book_data_matches(valid_book_payload, found_book)
+   
 #  NEGATIVE TESTS 
 
 def test_get_books_wrong_endpoint():
@@ -28,7 +51,7 @@ def test_get_books_wrong_endpoint():
     response = requests.get(f"{config.BASE_URL}/api/v1/Bookss") 
     assert response.status_code == HTTPStatus.NOT_FOUND, f"Expected {HTTPStatus.NOT_FOUND} but got {response.status_code}. Body: {response.text}"
     
-@pytest.mark.skip(reason="It is skipped because this API doesn´t recognize invalid header") 
+@pytest.mark.xfail(reason="API doesn´t recognize invalid header") 
 def test_get_books_bad_request_invalid_header():
     """Verify invalid Content-Type header returns 400 Bad Request"""
     headers = {"Content-Type": "invalid/type"}  # Unsupported header 
@@ -37,7 +60,7 @@ def test_get_books_bad_request_invalid_header():
         f"Expected {HTTPStatus.BAD_REQUEST} but got {response.status_code}. Body: {response.text}"
     )
 
-@pytest.mark.skip(reason="It is skipped because this API doesn´t recognize an invalid param")  
+@pytest.mark.xfail(reason="API doesn´t recognize an invalid param")  
 def test_get_books_bad_request_invalid_query():
     """Verify invalid query parameter returns 400 Bad Request"""
     params = {"id": "abc"}  # <> number
@@ -46,7 +69,7 @@ def test_get_books_bad_request_invalid_query():
         f"Expected {HTTPStatus.BAD_REQUEST} but got {response.status_code}. Body: {response.text}"
     )
     
-@pytest.mark.skip(reason="It is skipped because this API doesn´t requiere token yet")  
+@pytest.mark.xfail(reason="API does not require authentication") 
 def test_get_books_without_token_should_fail():
     """ Verify status code 401 or 403 without token """
     headers = {"Authorization": ""}  # No Authorization

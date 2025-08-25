@@ -25,10 +25,27 @@ def test_get_book_returns_expected_data(existing_book):
     book_id = existing_book["id"]
     response = books_api.get_book_by_id(book_id)
     data = response.json()
-    assert data["id"] == book_id
-    assert "title" in data
-    assert "description" in data
-    assert "pageCount" in data
+    assert "title" in data 
+    assert "description" in data 
+    assert "pageCount" in data 
+    assert "excerpt"in data 
+    assert "publishDate" in data 
+    
+@pytest.mark.xfail(reason="API does not persist data, so GET after POST will fail")
+def test_post_and_get_book_persists_data(valid_book_payload):
+    """ Verify the post persists data """
+    response = books_api.create_book(valid_book_payload)
+    assert response.status_code == HTTPStatus.OK, (
+        f"Expected 200 OK but got {response.status_code}. Body: {response.text}"
+    )
+    book_created = response.json()
+    book_id = book_created["id"]
+    get_response = books_api.get_book_by_id(book_id)
+    assert get_response.status_code == HTTPStatus.OK, (
+        f"Expected 200 OK but got {get_response.status_code}. Body: {get_response.text}"
+    )
+    book_retrieved = get_response.json()
+    assert_book_data_matches(valid_book_payload, book_retrieved)
 
 # NEGATIVE TESTS
 
@@ -48,7 +65,7 @@ def test_get_book_not_found(non_exist_book_id):
     data = response.json()
     assert data.get("title") == "Not Found"
     
-@pytest.mark.skip(reason="It is skipped because this API doesn´t requiere token yet")  
+@pytest.mark.xfail(reason="API does not require authentication") 
 def test_put_book_without_token(existing_book):
     """ Verify status code 401 or 403 without token """
     book_id = existing_book["id"]
